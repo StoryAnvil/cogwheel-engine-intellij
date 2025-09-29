@@ -1,0 +1,24 @@
+{
+  parserClass="com.github.denisjaved.cogwheelengineintellij.cogscript.parser.CogScriptParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="CogScript"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.denisjaved.cogwheelengineintellij.cogscript.psi"
+  psiImplPackage="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl"
+
+  elementTypeHolderClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTypes"
+  elementTypeClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptElementType"
+  tokenTypeClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE)
+
+
+property ::= (COMMENT) | BAD_CHARACTER
+{
+  methods=[getKey getValue]
+}

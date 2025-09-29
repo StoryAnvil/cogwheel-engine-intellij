@@ -1,15 +1,31 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.denisjaved.cogwheelengineintellij</id>
-    <name>cogwheel-engine-intellij</name>
-    <vendor>denisjaved</vendor>
+    <name>Cogwheel Engine</name>
+    <vendor>StoryAnvil</vendor>
+    <description><![CDATA[
+        Support for <a href="https://modrinth.com/mod/cogwheel-engine">Cogwheel Engine's</a> code files.
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.kotlin</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.denisjaved.cogwheelengineintellij.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.denisjaved.cogwheelengineintellij.startup.MyProjectActivity" />
+        <fileType name="CogScript"
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptFileType"
+                fieldName="INSTANCE"
+                language="cogscript"
+                extensions="sa"
+        />
+        <lang.parserDefinition
+                language="cogscript"
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+                language="cogscript"
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptSyntaxHighlighterFactory"/>
+        <colorSettingsPage
+                implementation="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptColorPage"/>
     </extensions>
 </idea-plugin>
