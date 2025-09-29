@@ -4,15 +4,10 @@ package com.github.denisjaved.cogwheelengineintellij.cogscript.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl.CogScriptTokenFaction;
 
 public interface CogScriptProperty extends PsiElement {
 
-  //WARNING: getKey(...) is skipped
-  //matching getKey(CogScriptProperty, ...)
-  //methods are not found in null
-
-  //WARNING: getValue(...) is skipped
-  //matching getValue(CogScriptProperty, ...)
-  //methods are not found in null
+  CogScriptTokenFaction stGetType();
 
 }

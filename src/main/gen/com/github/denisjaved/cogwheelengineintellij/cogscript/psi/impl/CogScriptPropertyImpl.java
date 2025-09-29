@@ -27,4 +27,9 @@ public class CogScriptPropertyImpl extends ASTWrapperPsiElement implements CogSc
     else super.accept(visitor);
   }
 
+  @Override
+  public CogScriptTokenFaction stGetType() {
+    return CogScriptPsiImplUtil.stGetType(this);
+  }
+
 }

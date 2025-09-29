@@ -37,6 +37,7 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
+  //     |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET
   static boolean item_(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "item_")) return false;
     boolean r;
@@ -47,6 +48,12 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, EXPR);
     if (!r) r = consumeToken(b, WHITESPACE);
     if (!r) r = consumeToken(b, HEAD_WHITESPACE);
+    if (!r) r = consumeToken(b, EXPR_ROOT);
+    if (!r) r = consumeToken(b, EXPR_PROP);
+    if (!r) r = consumeToken(b, EXPR_STR);
+    if (!r) r = consumeToken(b, EXPR_NUMERIC);
+    if (!r) r = consumeToken(b, EXPR_VARNAME);
+    if (!r) r = consumeToken(b, EXPR_BRACKET);
     return r;
   }
 
