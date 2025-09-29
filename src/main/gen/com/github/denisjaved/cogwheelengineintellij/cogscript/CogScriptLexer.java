@@ -3,14 +3,18 @@
 
 package com.github.denisjaved.cogwheelengineintellij.cogscript;
 
-import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTokenType;import com.intellij.psi.tree.IElementType;
+import com.github.denisjaved.cogwheelengineintellij.cogscript.data.Expression;
+import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTokenType;
 import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTypes;
 import com.github.denisjaved.cogwheelengineintellij.B2;
 import java.util.Stack;
 import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
+
+import static com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTokenType.For;
 
 
-class CogScriptLexer implements FlexLexer {
+public class CogScriptLexer implements FlexLexer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -23,9 +27,12 @@ class CogScriptLexer implements FlexLexer {
   public static final int IF_STATEMENT_HEAD = 2;
   public static final int IF_STATEMENT_TAIL = 4;
   public static final int EXPRESSION = 6;
-  public static final int FAIL_LINE_EXPR = 8;
-  public static final int INITIAL = 10;
-  public static final int COMMENT = 12;
+  public static final int EXPRESSION_VAR = 8;
+  public static final int EXPRESSION_VAR2 = 10;
+  public static final int EXPRESSION_QUOTE = 12;
+  public static final int FAIL_LINE_EXPR = 14;
+  public static final int INITIAL = 16;
+  public static final int COMMENT = 18;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -34,7 +41,8 @@ class CogScriptLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6, 6
+     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7, 
+     8,  8,  9, 9
   };
 
   /**
@@ -71,9 +79,11 @@ class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\12\0\1\1\2\2\1\3\22\0\1\4\2\0\1\5"+
-    "\4\0\1\6\1\7\74\0\1\10\2\0\1\11\21\0"+
-    "\1\12\1\0\1\13\7\0\1\2\u01a2\0\2\2\326\0"+
+    "\12\0\1\1\2\2\1\3\22\0\1\4\1\0\1\5"+
+    "\1\6\1\7\3\0\1\10\1\11\2\0\1\12\3\0"+
+    "\12\13\3\0\1\14\3\0\13\7\1\15\16\7\3\0"+
+    "\1\16\1\7\1\0\5\7\1\17\2\7\1\20\21\7"+
+    "\1\21\1\0\1\22\7\0\1\2\u01a2\0\2\2\326\0"+
     "\u0100\2";
 
   private static int [] zzUnpackcmap_blocks() {
@@ -101,13 +111,15 @@ class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\7\0\1\1\1\2\1\3\1\4\1\5\1\6\1\4"+
-    "\1\3\1\7\2\10\1\11\1\12\2\13\1\14\2\2"+
-    "\1\15\1\14\1\15\2\4\2\0\2\16\1\10\1\13"+
-    "\1\2\1\0\1\16\1\17";
+    "\12\0\1\1\1\2\1\3\1\4\1\5\1\6\1\3"+
+    "\1\7\2\10\1\11\1\12\1\13\1\14\1\15\1\7"+
+    "\2\16\1\17\2\20\1\4\1\21\1\22\2\23\1\24"+
+    "\2\25\1\26\2\2\1\27\1\26\1\27\2\4\2\0"+
+    "\1\10\1\0\1\30\1\31\1\32\1\16\1\20\1\0"+
+    "\1\23\1\25\1\2\1\0\2\33\1\32\1\34\1\33";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[40];
+    int [] result = new int[66];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -132,14 +144,18 @@ class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\14\0\30\0\44\0\60\0\74\0\110\0\124"+
-    "\0\140\0\124\0\124\0\124\0\124\0\154\0\170\0\124"+
-    "\0\204\0\220\0\124\0\124\0\234\0\250\0\124\0\264"+
-    "\0\300\0\314\0\330\0\124\0\344\0\360\0\154\0\170"+
-    "\0\374\0\u0108\0\124\0\124\0\124\0\u0114\0\124\0\124";
+    "\0\0\0\23\0\46\0\71\0\114\0\137\0\162\0\205"+
+    "\0\230\0\253\0\276\0\321\0\276\0\276\0\276\0\276"+
+    "\0\344\0\276\0\367\0\u010a\0\276\0\u011d\0\276\0\276"+
+    "\0\276\0\u0130\0\u0143\0\u0156\0\u0169\0\u017c\0\u018f\0\u01a2"+
+    "\0\u01b5\0\u01c8\0\u01db\0\u01ee\0\276\0\u0201\0\u0214\0\276"+
+    "\0\u0227\0\u023a\0\u024d\0\u0260\0\276\0\u0273\0\u0286\0\344"+
+    "\0\u0299\0\276\0\u02ac\0\276\0\u02bf\0\u02d2\0\276\0\276"+
+    "\0\u01a2\0\276\0\276\0\276\0\u02e5\0\u02f8\0\u030b\0\276"+
+    "\0\276\0\276";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[40];
+    int [] result = new int[66];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -162,19 +178,32 @@ class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\4\10\1\11\7\10\4\12\1\13\1\12\1\14\4\12"+
-    "\1\15\4\12\1\16\5\12\1\17\1\15\1\20\1\21"+
-    "\1\20\1\22\2\20\1\23\1\24\4\20\1\12\1\25"+
-    "\1\12\1\26\10\12\1\27\1\30\1\27\1\31\1\27"+
-    "\1\32\3\27\1\33\2\27\1\34\1\35\1\34\1\36"+
-    "\10\34\20\0\1\11\13\0\1\37\5\0\1\40\2\0"+
-    "\1\41\1\0\1\42\13\0\1\43\11\0\1\43\15\0"+
-    "\1\44\11\0\1\44\15\0\1\45\11\0\1\45\12\0"+
-    "\1\32\3\0\10\32\10\0\1\46\6\0\1\13\11\0"+
-    "\1\13\15\0\1\47\11\0\1\47\16\0\1\50\7\0";
+    "\4\13\1\14\16\13\4\15\1\16\3\15\1\17\11\15"+
+    "\1\20\4\15\1\16\4\15\1\21\10\15\1\20\1\22"+
+    "\1\23\1\22\1\24\1\22\1\25\1\22\1\26\1\27"+
+    "\1\30\1\31\1\26\1\22\1\26\1\32\2\26\2\22"+
+    "\1\15\1\33\1\15\1\34\1\16\2\15\1\35\3\15"+
+    "\1\35\1\15\1\35\1\15\2\35\1\15\1\20\1\15"+
+    "\1\36\1\15\1\37\1\40\7\15\1\41\5\15\1\20"+
+    "\1\42\1\43\1\42\1\44\1\42\1\45\15\42\1\15"+
+    "\1\46\1\15\1\47\17\15\1\50\1\51\1\50\1\52"+
+    "\2\50\1\53\11\50\1\54\1\50\1\20\1\55\1\56"+
+    "\1\55\1\57\17\55\27\0\1\14\22\0\1\60\14\0"+
+    "\1\61\4\0\1\62\20\0\1\62\25\0\1\63\2\0"+
+    "\1\26\1\64\2\0\1\26\1\65\1\26\1\0\2\26"+
+    "\15\0\1\66\12\0\1\67\20\0\1\67\30\0\1\35"+
+    "\3\0\1\35\1\0\1\35\1\0\2\35\5\0\1\70"+
+    "\20\0\1\70\25\0\1\71\7\0\1\41\12\0\1\41"+
+    "\16\0\1\42\1\0\1\42\1\0\1\42\1\0\15\42"+
+    "\3\0\1\72\20\0\1\72\24\0\1\73\20\0\1\73"+
+    "\24\0\1\74\20\0\1\74\21\0\1\53\3\0\17\53"+
+    "\17\0\1\75\6\0\1\16\20\0\1\16\22\0\1\76"+
+    "\1\0\1\77\23\0\1\63\7\0\1\65\12\0\1\65"+
+    "\31\0\1\66\1\0\1\100\11\0\1\101\21\0\1\102"+
+    "\20\0\1\102\21\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[288];
+    int [] result = new int[798];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -212,12 +241,13 @@ class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\7\0\1\11\1\1\4\11\2\1\1\11\2\1\2\11"+
-    "\2\1\1\11\4\1\1\11\2\1\2\0\2\1\3\11"+
-    "\1\0\2\11";
+    "\12\0\1\11\1\1\4\11\1\1\1\11\2\1\1\11"+
+    "\1\1\3\11\13\1\1\11\2\1\1\11\4\1\1\11"+
+    "\2\1\2\0\1\11\1\0\1\11\2\1\2\11\1\0"+
+    "\3\11\1\0\2\1\3\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[40];
+    int [] result = new int[66];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -284,7 +314,7 @@ class CogScriptLexer implements FlexLexer {
   private boolean zzEOFDone;
 
   /* user code: */
-    Stack<B2<Integer, Integer>> expressionDepth = new Stack<B2<Integer, Integer>>();
+    Expression expression = new Expression();
 
 
   /**
@@ -292,7 +322,7 @@ class CogScriptLexer implements FlexLexer {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  CogScriptLexer(java.io.Reader in) {
+  public CogScriptLexer(java.io.Reader in) {
     this.zzReader = in;
   }
 
@@ -545,91 +575,185 @@ class CogScriptLexer implements FlexLexer {
             { yybegin(INITIAL); yypushback(1); return CogScriptTypes.BAD_CHARACTER;
             }
           // fall through
-          case 16: break;
+          case 29: break;
           case 2:
             { return CogScriptTypes.HEAD_WHITESPACE;
             }
           // fall through
-          case 17: break;
+          case 30: break;
           case 3:
             { return CogScriptTypes.BAD_CHARACTER;
             }
           // fall through
-          case 18: break;
+          case 31: break;
           case 4:
             { yybegin(YYINITIAL); return CogScriptTypes.WHITESPACE;
             }
           // fall through
-          case 19: break;
+          case 32: break;
           case 5:
-            { yybegin(EXPRESSION); expressionDepth.push(new B2<>(0, IF_STATEMENT_TAIL)); return CogScriptTypes.BRACKETS;
+            { yybegin(EXPRESSION); expression.push(new Expression.DepthData(IF_STATEMENT_TAIL)); return CogScriptTypes.BRACKETS;
             }
           // fall through
-          case 20: break;
+          case 33: break;
           case 6:
             { return CogScriptTypes.BRACKETS;
             }
           // fall through
-          case 21: break;
+          case 34: break;
           case 7:
-            { return CogScriptTypes.EXPR;
+            { return For(expression, CogScriptTypes.EXPR);
             }
           // fall through
-          case 22: break;
+          case 35: break;
           case 8:
-            { //          if (expressionDepth.peek().a == 0) {
-//              // Fail this line because expression did not close all openning brackets
-//              //yybegin(FAIL_LINE_EXPR);
-//          }
-          // Leave expression because line ended
-          yybegin(expressionDepth.pop().b);
+            { // Leave expression because line ended
+          yybegin(expression.pop().nextState);
           return CogScriptTypes.WHITESPACE;
             }
           // fall through
-          case 23: break;
+          case 36: break;
           case 9:
-            { // Add one point to expression depth
-        expressionDepth.peek().a += 1;
-        return CogScriptTypes.EXPR;
+            { yybegin(EXPRESSION_QUOTE);
+          return CogScriptTypes.EXPR_STR;
             }
           // fall through
-          case 24: break;
+          case 37: break;
           case 10:
-            { expressionDepth.peek().a -= 1;
-        if (expressionDepth.peek().a == -1) {
-            // Leave expression as last bracket closed
-            yybegin(expressionDepth.pop().b);
-            return CogScriptTypes.BRACKETS;
+            { if (!expression.peek().hasRoot) {
+            expression.peek().hasRoot = true;
+            return For(expression, CogScriptTypes.EXPR_ROOT);
+        } else {
+            return For(expression, CogScriptTypes.BAD_CHARACTER); // WTF? Two expressions roots??
         }
-        return CogScriptTypes.EXPR;
             }
           // fall through
-          case 25: break;
+          case 38: break;
           case 11:
+            { // Add one point to expression depth
+        expression.peek().depth += 1;
+        return For(expression, CogScriptTypes.EXPR_BRACKET);
+            }
+          // fall through
+          case 39: break;
+          case 12:
+            { expression.peek().depth -= 1;
+            if (expression.peek().depth == -1) {
+                // Leave expression as last bracket closed
+                if (expression.peek().type == Expression.Type.NORMAL) {
+                    yypushback(1);
+                }
+                yybegin(expression.pop().nextState);
+                return For(expression, CogScriptTypes.EXPR_BRACKET);
+            }
+            return For(expression, CogScriptTypes.EXPR_BRACKET);
+            }
+          // fall through
+          case 40: break;
+          case 13:
+            { if (expression.peek().type == Expression.Type.COMMA_SEPARATED) {
+            yybegin(expression.pop().nextState);
+            expression.push(new Expression.DepthData(EXPRESSION));
+            expression.peek().type = Expression.Type.COMMA_SEPARATED;
+            return For(expression, CogScriptTypes.BRACKETS);
+        }
+            }
+          // fall through
+          case 41: break;
+          case 14:
+            { yybegin(YYINITIAL);
+              return CogScriptTypes.WHITESPACE;
+            }
+          // fall through
+          case 42: break;
+          case 15:
+            { yybegin(EXPRESSION_VAR2);
+        return CogScriptTypes.EXPR_VARNAME;
+            }
+          // fall through
+          case 43: break;
+          case 16:
+            { yybegin(YYINITIAL);
+        return CogScriptTypes.WHITESPACE;
+            }
+          // fall through
+          case 44: break;
+          case 17:
+            { yybegin(EXPRESSION); // Variable defenition ended. Return to expression handler
+        return CogScriptTypes.BRACKETS;
+            }
+          // fall through
+          case 45: break;
+          case 18:
+            { return CogScriptTypes.EXPR_STR;
+            }
+          // fall through
+          case 46: break;
+          case 19:
+            { yybegin(YYINITIAL);
+          return CogScriptTypes.WHITESPACE;
+            }
+          // fall through
+          case 47: break;
+          case 20:
+            { yybegin(EXPRESSION);
+          return CogScriptTypes.EXPR_STR;
+            }
+          // fall through
+          case 48: break;
+          case 21:
             { yybegin(YYINITIAL); return CogScriptTypes.BAD_CHARACTER;
             }
           // fall through
-          case 26: break;
-          case 12:
-            { yybegin(EXPRESSION); expressionDepth.clear(); expressionDepth.push(new B2<>(0, YYINITIAL)); return CogScriptTypes.EXPR;
+          case 49: break;
+          case 22:
+            { yybegin(EXPRESSION); yypushback(1); expression.clear(); expression.push(new Expression.DepthData(YYINITIAL)); return CogScriptTypes.EXPR;
             }
           // fall through
-          case 27: break;
-          case 13:
+          case 50: break;
+          case 23:
             { yybegin(COMMENT); return CogScriptTypes.COMMENT;
             }
           // fall through
-          case 28: break;
-          case 14:
+          case 51: break;
+          case 24:
+            { if (expression.peek().hasRoot) {
+                expression.push(new Expression.DepthData(-1 /* Start with negetive depth to cancel out pushed back openning bracket */, EXPRESSION));
+                expression.peek().type = Expression.Type.COMMA_SEPARATED;
+                yypushback(1);
+                yybegin(EXPRESSION);
+                return For(expression, CogScriptTypes.EXPR_PROP);
+            }
+            }
+          // fall through
+          case 52: break;
+          case 25:
+            { if (expression.peek().hasVariable) {
+            return CogScriptTypes.BAD_CHARACTER; // WTF? Two variable defenitions??
+        } else {
+            expression.peek().hasVariable = true;
+            yybegin(EXPRESSION_VAR);
+            yypushback(yylength()); // Fully pushback entire variable defenition
+            return CogScriptTypes.BAD_CHARACTER;
+        }
+            }
+          // fall through
+          case 53: break;
+          case 26:
+            { return CogScriptTypes.EXPR_NUMERIC;
+            }
+          // fall through
+          case 54: break;
+          case 27:
             { yybegin(YYINITIAL); return CogScriptTypes.BRACKETS;
             }
           // fall through
-          case 29: break;
-          case 15:
-            { yybegin(IF_STATEMENT_HEAD); return CogScriptTypes.KEYWORD;
+          case 55: break;
+          case 28:
+            { yybegin(IF_STATEMENT_HEAD); expression.clear(); return CogScriptTypes.KEYWORD;
             }
           // fall through
-          case 30: break;
+          case 56: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

@@ -27,5 +27,8 @@
                 implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptSyntaxHighlighterFactory"/>
         <colorSettingsPage
                 implementation="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptColorPage"/>
+        <lang.commenter
+                language="cogscript"
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptCommenter"/>
     </extensions>
 </idea-plugin>

@@ -18,6 +18,9 @@ public class CogScriptColorPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
             new AttributesDescriptor("Keyword", CogScriptSyntaxHighlighter.KEYWORD),
             new AttributesDescriptor("Comment", CogScriptSyntaxHighlighter.COMMENT),
+            new AttributesDescriptor("Error", CogScriptSyntaxHighlighter.BAD),
+            new AttributesDescriptor("String", CogScriptSyntaxHighlighter.STRING_LITERAL),
+            new AttributesDescriptor("Number", CogScriptSyntaxHighlighter.INT_LITERAL),
     };
 
     @Override

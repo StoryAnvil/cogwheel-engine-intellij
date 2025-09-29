@@ -21,10 +21,16 @@ public class CogScriptSyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("COGSCRIPT_ERROR", HighlighterColors.BAD_CHARACTER);
     public static final TextAttributesKey TEST =
             createTextAttributesKey("COGSCRIPT_TEST", DefaultLanguageHighlighterColors.NUMBER);
+    public static final TextAttributesKey STRING_LITERAL =
+            createTextAttributesKey("COGSCRIPT_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey INT_LITERAL =
+            createTextAttributesKey("COGSCRIPT_INT", DefaultLanguageHighlighterColors.NUMBER);
 
 
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] STRING_LITERAL_KEYS = new TextAttributesKey[]{STRING_LITERAL};
+    private static final TextAttributesKey[] INT_LITERAL_KEYS = new TextAttributesKey[]{INT_LITERAL};
     private static final TextAttributesKey[] BAD_KEYS = new TextAttributesKey[]{BAD};
     private static final TextAttributesKey[] TEST_KEYS = new TextAttributesKey[]{TEST};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
@@ -48,6 +54,12 @@ public class CogScriptSyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType.equals(CogScriptTypes.EXPR)) {
             return TEST_KEYS;
+        }
+        if (tokenType.equals(CogScriptTypes.EXPR_STR)) {
+            return STRING_LITERAL_KEYS;
+        }
+        if (tokenType.equals(CogScriptTypes.EXPR_NUMERIC)) {
+            return INT_LITERAL_KEYS;
         }
         return EMPTY_KEYS;
     }

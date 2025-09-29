@@ -11,14 +11,16 @@
   elementTypeHolderClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTypes"
   elementTypeClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptElementType"
   tokenTypeClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTokenType"
+  psiImplUtilClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl.CogScriptPsiImplUtil"
 }
 
 simpleFile ::= item_*
 
-private item_ ::= (property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE)
+private item_ ::= (property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
+    |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET)
 
 
 property ::= (COMMENT) | BAD_CHARACTER
 {
-  methods=[getKey getValue]
+  methods=[stGetType]
 }
