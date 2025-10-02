@@ -5,6 +5,7 @@ import com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptLang;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
 public class CogScriptFile extends PsiFileBase {
@@ -15,6 +16,11 @@ public class CogScriptFile extends PsiFileBase {
     @Override
     public @NotNull FileType getFileType() {
         return CogScriptFileType.INSTANCE;
+    }
+
+    @Override
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        super.accept(visitor);
     }
 
     @Override

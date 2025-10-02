@@ -46,14 +46,11 @@ public class CogScriptSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(CogScriptTypes.COMMENT)) {
             return COMMENT_KEYS;
         }
-        if (tokenType.equals(CogScriptTypes.KEYWORD)) {
+        if (tokenType.equals(CogScriptTypes.KEYWORD) || tokenType.equals(CogScriptTypes.IF_KEYWORD)) {
             return KEYWORD_KEYS;
         }
         if (tokenType.equals(CogScriptTypes.BAD_CHARACTER)) {
             return BAD_KEYS;
-        }
-        if (tokenType.equals(CogScriptTypes.EXPR)) {
-            return TEST_KEYS;
         }
         if (tokenType.equals(CogScriptTypes.EXPR_STR)) {
             return STRING_LITERAL_KEYS;

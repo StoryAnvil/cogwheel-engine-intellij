@@ -26,13 +26,14 @@ public class CogScriptLexer implements FlexLexer {
   public static final int YYINITIAL = 0;
   public static final int IF_STATEMENT_HEAD = 2;
   public static final int IF_STATEMENT_TAIL = 4;
-  public static final int EXPRESSION = 6;
-  public static final int EXPRESSION_VAR = 8;
-  public static final int EXPRESSION_VAR2 = 10;
-  public static final int EXPRESSION_QUOTE = 12;
-  public static final int FAIL_LINE_EXPR = 14;
-  public static final int INITIAL = 16;
-  public static final int COMMENT = 18;
+  public static final int LINE_CATCH = 6;
+  public static final int EXPRESSION = 8;
+  public static final int EXPRESSION_VAR = 10;
+  public static final int EXPRESSION_VAR2 = 12;
+  public static final int EXPRESSION_QUOTE = 14;
+  public static final int FAIL_LINE_EXPR = 16;
+  public static final int INITIAL = 18;
+  public static final int COMMENT = 20;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -42,7 +43,7 @@ public class CogScriptLexer implements FlexLexer {
    */
   private static final int ZZ_LEXSTATE[] = {
      0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7, 
-     8,  8,  9, 9
+     8,  8,  9,  9, 10, 10
   };
 
   /**
@@ -80,11 +81,11 @@ public class CogScriptLexer implements FlexLexer {
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\12\0\1\1\2\2\1\3\22\0\1\4\1\0\1\5"+
-    "\1\6\1\7\3\0\1\10\1\11\2\0\1\12\3\0"+
-    "\12\13\3\0\1\14\3\0\13\7\1\15\16\7\3\0"+
-    "\1\16\1\7\1\0\5\7\1\17\2\7\1\20\21\7"+
-    "\1\21\1\0\1\22\7\0\1\2\u01a2\0\2\2\326\0"+
-    "\u0100\2";
+    "\1\6\1\7\3\0\1\10\1\11\2\0\1\12\1\0"+
+    "\1\13\1\0\12\14\3\0\1\15\3\0\13\7\1\16"+
+    "\16\7\3\0\1\17\1\7\1\0\5\7\1\20\2\7"+
+    "\1\21\21\7\1\22\1\0\1\23\7\0\1\2\u01a2\0"+
+    "\2\2\326\0\u0100\2";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -111,15 +112,16 @@ public class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\12\0\1\1\1\2\1\3\1\4\1\5\1\6\1\3"+
-    "\1\7\2\10\1\11\1\12\1\13\1\14\1\15\1\7"+
-    "\2\16\1\17\2\20\1\4\1\21\1\22\2\23\1\24"+
-    "\2\25\1\26\2\2\1\27\1\26\1\27\2\4\2\0"+
-    "\1\10\1\0\1\30\1\31\1\32\1\16\1\20\1\0"+
-    "\1\23\1\25\1\2\1\0\2\33\1\32\1\34\1\33";
+    "\13\0\3\1\1\2\1\3\2\4\1\5\1\6\1\7"+
+    "\1\3\1\10\2\11\1\12\1\13\1\14\1\15\1\16"+
+    "\2\10\2\17\1\20\2\21\1\5\1\22\1\23\2\24"+
+    "\1\25\1\26\2\2\1\27\1\26\1\27\2\5\1\4"+
+    "\2\0\1\11\1\0\1\30\1\0\1\31\1\17\1\21"+
+    "\1\0\1\24\1\2\1\0\2\32\1\33\1\31\1\34"+
+    "\1\32";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[66];
+    int [] result = new int[71];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -144,18 +146,18 @@ public class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\23\0\46\0\71\0\114\0\137\0\162\0\205"+
-    "\0\230\0\253\0\276\0\321\0\276\0\276\0\276\0\276"+
-    "\0\344\0\276\0\367\0\u010a\0\276\0\u011d\0\276\0\276"+
-    "\0\276\0\u0130\0\u0143\0\u0156\0\u0169\0\u017c\0\u018f\0\u01a2"+
-    "\0\u01b5\0\u01c8\0\u01db\0\u01ee\0\276\0\u0201\0\u0214\0\276"+
-    "\0\u0227\0\u023a\0\u024d\0\u0260\0\276\0\u0273\0\u0286\0\344"+
-    "\0\u0299\0\276\0\u02ac\0\276\0\u02bf\0\u02d2\0\276\0\276"+
-    "\0\u01a2\0\276\0\276\0\276\0\u02e5\0\u02f8\0\u030b\0\276"+
-    "\0\276\0\276";
+    "\0\0\0\24\0\50\0\74\0\120\0\144\0\170\0\214"+
+    "\0\240\0\264\0\310\0\334\0\360\0\u0104\0\u0118\0\334"+
+    "\0\360\0\u0104\0\334\0\334\0\334\0\u012c\0\334\0\u0140"+
+    "\0\u0154\0\334\0\u0168\0\334\0\334\0\334\0\u017c\0\u0190"+
+    "\0\u01a4\0\u01b8\0\u01cc\0\u01e0\0\u01f4\0\u0208\0\u021c\0\u0230"+
+    "\0\u0244\0\u0258\0\334\0\334\0\u026c\0\u0280\0\u0294\0\u02a8"+
+    "\0\334\0\u02bc\0\u02d0\0\334\0\u012c\0\u02e4\0\334\0\u02f8"+
+    "\0\u030c\0\u0320\0\u0334\0\334\0\334\0\u0208\0\334\0\334"+
+    "\0\u0348\0\u035c\0\u0370\0\334\0\334\0\334\0\334";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[66];
+    int [] result = new int[71];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -178,32 +180,36 @@ public class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\4\13\1\14\16\13\4\15\1\16\3\15\1\17\11\15"+
-    "\1\20\4\15\1\16\4\15\1\21\10\15\1\20\1\22"+
-    "\1\23\1\22\1\24\1\22\1\25\1\22\1\26\1\27"+
-    "\1\30\1\31\1\26\1\22\1\26\1\32\2\26\2\22"+
-    "\1\15\1\33\1\15\1\34\1\16\2\15\1\35\3\15"+
-    "\1\35\1\15\1\35\1\15\2\35\1\15\1\20\1\15"+
-    "\1\36\1\15\1\37\1\40\7\15\1\41\5\15\1\20"+
-    "\1\42\1\43\1\42\1\44\1\42\1\45\15\42\1\15"+
-    "\1\46\1\15\1\47\17\15\1\50\1\51\1\50\1\52"+
-    "\2\50\1\53\11\50\1\54\1\50\1\20\1\55\1\56"+
-    "\1\55\1\57\17\55\27\0\1\14\22\0\1\60\14\0"+
-    "\1\61\4\0\1\62\20\0\1\62\25\0\1\63\2\0"+
-    "\1\26\1\64\2\0\1\26\1\65\1\26\1\0\2\26"+
-    "\15\0\1\66\12\0\1\67\20\0\1\67\30\0\1\35"+
-    "\3\0\1\35\1\0\1\35\1\0\2\35\5\0\1\70"+
-    "\20\0\1\70\25\0\1\71\7\0\1\41\12\0\1\41"+
-    "\16\0\1\42\1\0\1\42\1\0\1\42\1\0\15\42"+
-    "\3\0\1\72\20\0\1\72\24\0\1\73\20\0\1\73"+
-    "\24\0\1\74\20\0\1\74\21\0\1\53\3\0\17\53"+
-    "\17\0\1\75\6\0\1\16\20\0\1\16\22\0\1\76"+
-    "\1\0\1\77\23\0\1\63\7\0\1\65\12\0\1\65"+
-    "\31\0\1\66\1\0\1\100\11\0\1\101\21\0\1\102"+
-    "\20\0\1\102\21\0";
+    "\1\14\1\15\1\14\1\16\1\17\17\14\1\20\1\21"+
+    "\1\20\1\22\1\23\3\20\1\24\12\20\1\25\1\20"+
+    "\1\21\1\20\1\22\1\23\4\20\1\26\11\20\1\25"+
+    "\1\20\1\21\1\20\1\22\1\23\16\20\1\25\1\27"+
+    "\1\30\1\27\1\31\1\27\1\32\1\27\1\33\1\34"+
+    "\1\35\1\36\1\37\1\33\1\27\1\33\1\40\2\33"+
+    "\2\27\1\20\1\41\1\20\1\42\1\23\2\20\1\43"+
+    "\4\20\1\43\1\20\1\43\1\20\2\43\1\20\1\25"+
+    "\1\20\1\44\1\20\1\45\1\46\10\20\1\47\5\20"+
+    "\1\25\1\50\1\51\1\50\1\52\1\50\1\53\16\50"+
+    "\1\20\1\21\1\20\1\22\20\20\1\54\1\55\1\54"+
+    "\1\56\2\54\1\57\12\54\1\60\1\54\1\25\1\61"+
+    "\1\62\1\61\1\63\20\61\27\0\1\64\21\0\1\64"+
+    "\26\0\1\17\23\0\1\65\15\0\1\66\4\0\1\67"+
+    "\21\0\1\67\26\0\1\70\2\0\1\33\4\0\1\33"+
+    "\1\71\1\33\1\0\2\33\11\0\1\72\4\0\1\72"+
+    "\1\0\1\72\1\0\2\72\16\0\1\73\12\0\1\74"+
+    "\21\0\1\74\31\0\1\43\4\0\1\43\1\0\1\43"+
+    "\1\0\2\43\5\0\1\75\21\0\1\75\26\0\1\76"+
+    "\10\0\1\47\12\0\1\47\17\0\1\50\1\0\1\50"+
+    "\1\0\1\50\1\0\16\50\3\0\1\77\21\0\1\77"+
+    "\25\0\1\100\21\0\1\100\22\0\1\57\3\0\20\57"+
+    "\20\0\1\101\6\0\1\23\21\0\1\23\23\0\1\102"+
+    "\1\0\1\103\24\0\1\70\10\0\1\71\12\0\1\71"+
+    "\26\0\1\72\1\104\3\0\1\72\1\0\1\72\1\0"+
+    "\2\72\16\0\1\73\1\0\1\105\11\0\1\106\22\0"+
+    "\1\107\21\0\1\107\22\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[798];
+    int [] result = new int[900];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -241,13 +247,13 @@ public class CogScriptLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\12\0\1\11\1\1\4\11\1\1\1\11\2\1\1\11"+
-    "\1\1\3\11\13\1\1\11\2\1\1\11\4\1\1\11"+
-    "\2\1\2\0\1\11\1\0\1\11\2\1\2\11\1\0"+
-    "\3\11\1\0\2\1\3\11";
+    "\13\0\1\11\3\1\1\11\2\1\3\11\1\1\1\11"+
+    "\2\1\1\11\1\1\3\11\14\1\2\11\4\1\1\11"+
+    "\2\1\1\11\2\0\1\11\1\0\1\1\1\0\1\1"+
+    "\2\11\1\0\2\11\1\0\2\1\4\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[66];
+    int [] result = new int[71];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -587,39 +593,44 @@ public class CogScriptLexer implements FlexLexer {
           // fall through
           case 31: break;
           case 4:
-            { yybegin(YYINITIAL); return CogScriptTypes.WHITESPACE;
+            { yybegin(YYINITIAL); return CogScriptTypes.LINE_TERMINATOR;
             }
           // fall through
           case 32: break;
           case 5:
-            { yybegin(EXPRESSION); expression.push(new Expression.DepthData(IF_STATEMENT_TAIL)); return CogScriptTypes.BRACKETS;
+            { yybegin(YYINITIAL); return CogScriptTypes.WHITESPACE;
             }
           // fall through
           case 33: break;
           case 6:
-            { return CogScriptTypes.BRACKETS;
+            { yybegin(EXPRESSION); expression.push(new Expression.DepthData(IF_STATEMENT_TAIL)); return CogScriptTypes.BRACKETS;
             }
           // fall through
           case 34: break;
           case 7:
-            { return For(expression, CogScriptTypes.EXPR);
+            { return CogScriptTypes.BRACKETS;
             }
           // fall through
           case 35: break;
           case 8:
-            { // Leave expression because line ended
-          yybegin(expression.pop().nextState);
-          return CogScriptTypes.WHITESPACE;
+            { return For(expression, CogScriptTypes.BAD_CHARACTER);
             }
           // fall through
           case 36: break;
           case 9:
-            { yybegin(EXPRESSION_QUOTE);
-          return CogScriptTypes.EXPR_STR;
+            { // Leave expression because line ended
+          yybegin(expression.pop().nextState);
+          return CogScriptTypes.LINE_TERMINATOR;
             }
           // fall through
           case 37: break;
           case 10:
+            { yybegin(EXPRESSION_QUOTE);
+          return CogScriptTypes.EXPR_STR;
+            }
+          // fall through
+          case 38: break;
+          case 11:
             { if (!expression.peek().hasRoot) {
             expression.peek().hasRoot = true;
             return For(expression, CogScriptTypes.EXPR_ROOT);
@@ -628,15 +639,15 @@ public class CogScriptLexer implements FlexLexer {
         }
             }
           // fall through
-          case 38: break;
-          case 11:
+          case 39: break;
+          case 12:
             { // Add one point to expression depth
         expression.peek().depth += 1;
         return For(expression, CogScriptTypes.EXPR_BRACKET);
             }
           // fall through
-          case 39: break;
-          case 12:
+          case 40: break;
+          case 13:
             { expression.peek().depth -= 1;
             if (expression.peek().depth == -1) {
                 // Leave expression as last bracket closed
@@ -649,8 +660,8 @@ public class CogScriptLexer implements FlexLexer {
             return For(expression, CogScriptTypes.EXPR_BRACKET);
             }
           // fall through
-          case 40: break;
-          case 13:
+          case 41: break;
+          case 14:
             { if (expression.peek().type == Expression.Type.COMMA_SEPARATED) {
             yybegin(expression.pop().nextState);
             expression.push(new Expression.DepthData(EXPRESSION));
@@ -659,50 +670,45 @@ public class CogScriptLexer implements FlexLexer {
         }
             }
           // fall through
-          case 41: break;
-          case 14:
-            { yybegin(YYINITIAL);
-              return CogScriptTypes.WHITESPACE;
-            }
-          // fall through
           case 42: break;
           case 15:
-            { yybegin(EXPRESSION_VAR2);
-        return CogScriptTypes.EXPR_VARNAME;
+            { yybegin(YYINITIAL);
+              return CogScriptTypes.LINE_TERMINATOR;
             }
           // fall through
           case 43: break;
           case 16:
-            { yybegin(YYINITIAL);
-        return CogScriptTypes.WHITESPACE;
+            { yybegin(EXPRESSION_VAR2);
+        return CogScriptTypes.EXPR_VARNAME;
             }
           // fall through
           case 44: break;
           case 17:
-            { yybegin(EXPRESSION); // Variable defenition ended. Return to expression handler
-        return CogScriptTypes.BRACKETS;
+            { yybegin(YYINITIAL);
+        return CogScriptTypes.LINE_TERMINATOR;
             }
           // fall through
           case 45: break;
           case 18:
-            { return CogScriptTypes.EXPR_STR;
+            { yybegin(EXPRESSION); // Variable defenition ended. Return to expression handler
+        return CogScriptTypes.BRACKETS;
             }
           // fall through
           case 46: break;
           case 19:
-            { yybegin(YYINITIAL);
-          return CogScriptTypes.WHITESPACE;
+            { return CogScriptTypes.EXPR_STR;
             }
           // fall through
           case 47: break;
           case 20:
-            { yybegin(EXPRESSION);
-          return CogScriptTypes.EXPR_STR;
+            { yybegin(YYINITIAL);
+          return CogScriptTypes.LINE_TERMINATOR;
             }
           // fall through
           case 48: break;
           case 21:
-            { yybegin(YYINITIAL); return CogScriptTypes.BAD_CHARACTER;
+            { yybegin(EXPRESSION);
+          return CogScriptTypes.EXPR_STR;
             }
           // fall through
           case 49: break;
@@ -717,17 +723,6 @@ public class CogScriptLexer implements FlexLexer {
           // fall through
           case 51: break;
           case 24:
-            { if (expression.peek().hasRoot) {
-                expression.push(new Expression.DepthData(-1 /* Start with negetive depth to cancel out pushed back openning bracket */, EXPRESSION));
-                expression.peek().type = Expression.Type.COMMA_SEPARATED;
-                yypushback(1);
-                yybegin(EXPRESSION);
-                return For(expression, CogScriptTypes.EXPR_PROP);
-            }
-            }
-          // fall through
-          case 52: break;
-          case 25:
             { if (expression.peek().hasVariable) {
             return CogScriptTypes.BAD_CHARACTER; // WTF? Two variable defenitions??
         } else {
@@ -738,19 +733,30 @@ public class CogScriptLexer implements FlexLexer {
         }
             }
           // fall through
+          case 52: break;
+          case 25:
+            { return CogScriptTypes.EXPR_NUMERIC;
+            }
+          // fall through
           case 53: break;
           case 26:
-            { return CogScriptTypes.EXPR_NUMERIC;
+            { yybegin(LINE_CATCH); yypushback(1); return CogScriptTypes.BRACKETS;
             }
           // fall through
           case 54: break;
           case 27:
-            { yybegin(YYINITIAL); return CogScriptTypes.BRACKETS;
+            { if (expression.peek().hasRoot) {
+                expression.push(new Expression.DepthData(-1 /* Start with negetive depth to cancel out pushed back openning bracket */, EXPRESSION));
+                expression.peek().type = Expression.Type.COMMA_SEPARATED;
+                yypushback(1);
+                yybegin(EXPRESSION);
+                return For(expression, CogScriptTypes.EXPR_PROP);
+            }
             }
           // fall through
           case 55: break;
           case 28:
-            { yybegin(IF_STATEMENT_HEAD); expression.clear(); return CogScriptTypes.KEYWORD;
+            { yybegin(IF_STATEMENT_HEAD); expression.clear(); return CogScriptTypes.IF_KEYWORD;
             }
           // fall through
           case 56: break;

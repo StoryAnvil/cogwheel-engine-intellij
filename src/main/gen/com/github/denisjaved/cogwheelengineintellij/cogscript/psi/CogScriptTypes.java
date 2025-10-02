@@ -8,7 +8,9 @@ import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl.*;
 
 public interface CogScriptTypes {
 
-  IElementType PROPERTY = new CogScriptElementType("PROPERTY");
+  IElementType KEYWORDS = new CogScriptElementType("KEYWORDS");
+  IElementType NAMED_VARIABLE = new CogScriptElementType("NAMED_VARIABLE");
+  IElementType VARIABLE_NAME = new CogScriptElementType("VARIABLE_NAME");
 
   IElementType BAD_CHARACTER = new CogScriptTokenType("BAD_CHARACTER");
   IElementType BRACKETS = new CogScriptTokenType("BRACKETS");
@@ -21,14 +23,23 @@ public interface CogScriptTypes {
   IElementType EXPR_STR = new CogScriptTokenType("EXPR_STR");
   IElementType EXPR_VARNAME = new CogScriptTokenType("EXPR_VARNAME");
   IElementType HEAD_WHITESPACE = new CogScriptTokenType("HEAD_WHITESPACE");
+  IElementType IF_KEYWORD = new CogScriptTokenType("IF_KEYWORD");
+  IElementType IMPOSSIBLE = new CogScriptTokenType("IMPOSSIBLE");
   IElementType KEYWORD = new CogScriptTokenType("KEYWORD");
+  IElementType LINE_TERMINATOR = new CogScriptTokenType("LINE_TERMINATOR");
   IElementType WHITESPACE = new CogScriptTokenType("WHITESPACE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == PROPERTY) {
-        return new CogScriptPropertyImpl(node);
+      if (type == KEYWORDS) {
+        return new CogScriptKeywordsImpl(node);
+      }
+      else if (type == NAMED_VARIABLE) {
+        return new CogScriptNamedVariableImpl(node);
+      }
+      else if (type == VARIABLE_NAME) {
+        return new CogScriptVariableNameImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

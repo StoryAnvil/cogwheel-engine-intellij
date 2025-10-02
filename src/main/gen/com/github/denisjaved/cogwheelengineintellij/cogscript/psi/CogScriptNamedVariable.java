@@ -4,10 +4,11 @@ package com.github.denisjaved.cogwheelengineintellij.cogscript.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl.CogScriptTokenFaction;
 
-public interface CogScriptProperty extends PsiElement {
+public interface CogScriptNamedVariable extends NamedVariable {
 
-  CogScriptTokenFaction stGetType();
+  PsiElement setName(@NotNull String name);
+
+  PsiElement getNameIdentifier();
 
 }
