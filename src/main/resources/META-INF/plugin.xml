@@ -9,6 +9,7 @@
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.kotlin</depends>
+    <depends>com.intellij.modules.json</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
@@ -37,12 +38,16 @@
                 implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.inspections.RedefinedDefaultVariable"
                 language="cogscript" key="inspection.cogscript.RedefinedDefaultVariable" groupKey="inspection.cogscript.group"
                 enabledByDefault="true"/>
-        <psi.referenceContributor
-                language="cogscript"
-                implementation="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptReferenceContributor"/>
-        <lang.refactoringSupport
-                language="cogscript"
-                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptVariableSupportProvider"/>
-        <lang.elementManipulator forClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.NamedVariable" implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptElementManipulator" />
+        <localInspection
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.json.JsonDiffInspection"
+                language="JSON" key="inspection.json.Diff" groupKey="inspection.cogscript.group"
+                enabledByDefault="false"/>
+<!--        <psi.referenceContributor-->
+<!--                language="cogscript"-->
+<!--                implementation="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptReferenceContributor"/>-->
+<!--        <lang.refactoringSupport-->
+<!--                language="cogscript"-->
+<!--                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptVariableSupportProvider"/>-->
+<!--        <lang.elementManipulator forClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.NamedVariable" implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptElementManipulator" />-->
     </extensions>
 </idea-plugin>

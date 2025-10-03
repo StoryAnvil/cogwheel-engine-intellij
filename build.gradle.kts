@@ -49,6 +49,8 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
 
         pluginVerifier(version="1.383")
+
+        bundledPlugins("com.intellij.modules.json")
     }
 }
 
