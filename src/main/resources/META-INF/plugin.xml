@@ -30,5 +30,19 @@
         <lang.commenter
                 language="cogscript"
                 implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptCommenter"/>
+<!--        <annotator-->
+<!--                language="cogscript"-->
+<!--                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.CogScriptAnnotator"/>-->
+        <localInspection
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.inspections.RedefinedDefaultVariable"
+                language="cogscript" key="inspection.cogscript.RedefinedDefaultVariable" groupKey="inspection.cogscript.group"
+                enabledByDefault="true"/>
+        <psi.referenceContributor
+                language="cogscript"
+                implementation="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptReferenceContributor"/>
+        <lang.refactoringSupport
+                language="cogscript"
+                implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptVariableSupportProvider"/>
+        <lang.elementManipulator forClass="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.NamedVariable" implementationClass="com.github.denisjaved.cogwheelengineintellij.cogscript.references.CogScriptElementManipulator" />
     </extensions>
 </idea-plugin>

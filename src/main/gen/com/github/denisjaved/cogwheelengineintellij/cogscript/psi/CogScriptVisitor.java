@@ -7,8 +7,16 @@ import com.intellij.psi.PsiElement;
 
 public class CogScriptVisitor extends PsiElementVisitor {
 
-  public void visitProperty(@NotNull CogScriptProperty o) {
+  public void visitKeywords(@NotNull CogScriptKeywords o) {
     visitPsiElement(o);
+  }
+
+  public void visitNamedVariable(@NotNull CogScriptNamedVariable o) {
+    visitNamedVariable(o);
+  }
+
+  public void visitVariableName(@NotNull CogScriptVariableName o) {
+    visitNamedVariable(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

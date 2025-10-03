@@ -5,3 +5,7 @@
 .kotlin
 .qodana
 build
+/test/
+./test
+/test/
+./test

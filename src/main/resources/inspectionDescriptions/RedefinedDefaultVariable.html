@@ -1,0 +1,22 @@
+<html>
+<body>
+<p>
+CogScript has variables that are predefined in every script. These variables called <a href="https://storyanvil.github.io/wiki/wiki.html?p=wiki/projects/cogwheel/defaultvariables">default variables</a>.
+Redefining them can cause confusing because it is usually expected to have these variables in every script.
+</p>
+<p>
+Example:
+</p>
+<pre><code>
+# Check contents of 'Cogwheel' variable (this is first line of script)
+# Line below will log "Cogwheel Object" to console because it contains CogMaster object (see Cogwheel Engine's wiki for more info).
+Cogwheel.log(Cogwheel)
+
+# Redefine the 'Cogwheel' variable
+Cogwheel = true
+Cogwheel.log(Cogwheel)
+# Line above will log "TRUE" to console because we redefined the 'Cogwheel' variable
+</code></pre>
+<!-- tooltip end -->
+</body>
+</html>

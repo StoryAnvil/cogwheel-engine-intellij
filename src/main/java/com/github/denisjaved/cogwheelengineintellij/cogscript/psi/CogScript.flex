@@ -27,6 +27,7 @@ LineTerminator = \r\n|\n\r|\n|\r
 WhiteSpace = [ ]
 %state IF_STATEMENT_HEAD
 %state IF_STATEMENT_TAIL
+%state LINE_CATCH
 %state EXPRESSION
 %state EXPRESSION_VAR
 %state EXPRESSION_VAR2
@@ -43,7 +44,7 @@ WhiteSpace = [ ]
 <INITIAL> {
     {LineTerminator} {return CogScriptTypes.HEAD_WHITESPACE;}
     (\#).* {yybegin(COMMENT); return CogScriptTypes.COMMENT; }
-    if[{WhiteSpace}] {yybegin(IF_STATEMENT_HEAD); expression.clear(); return CogScriptTypes.KEYWORD; }
+    if[{WhiteSpace}] {yybegin(IF_STATEMENT_HEAD); expression.clear(); return CogScriptTypes.IF_KEYWORD; }
     "}" {return CogScriptTypes.BRACKETS;}
     [^] {yybegin(EXPRESSION); yypushback(1); expression.clear(); expression.push(new Expression.DepthData(YYINITIAL)); return CogScriptTypes.EXPR;}
 }
@@ -55,7 +56,10 @@ WhiteSpace = [ ]
     "(" {yybegin(EXPRESSION); expression.push(new Expression.DepthData(IF_STATEMENT_TAIL)); return CogScriptTypes.BRACKETS;}
 }
 <IF_STATEMENT_TAIL> {
-    ")"{WhiteSpace}*"{"{LineTerminator} {yybegin(YYINITIAL); return CogScriptTypes.BRACKETS;}
+    ")"{WhiteSpace}*"{"{LineTerminator} {yybegin(LINE_CATCH); yypushback(1); return CogScriptTypes.BRACKETS;}
+}
+<LINE_CATCH> {
+    {LineTerminator} {yybegin(YYINITIAL); return CogScriptTypes.LINE_TERMINATOR;}
 }
 <EXPRESSION> {
     "(" {
@@ -78,12 +82,12 @@ WhiteSpace = [ ]
     {LineTerminator} {
           // Leave expression because line ended
           yybegin(expression.pop().nextState);
-          return CogScriptTypes.WHITESPACE;
+          return CogScriptTypes.LINE_TERMINATOR;
     }
     "^"[0-9]+"L"? {
           return CogScriptTypes.EXPR_NUMERIC;
       }
-    [a-zA-Z0-9_$]+\( {
+    \.[a-zA-Z0-9_$]+\( {
             if (expression.peek().hasRoot) {
                 expression.push(new Expression.DepthData(-1 /* Start with negetive depth to cancel out pushed back openning bracket */, EXPRESSION));
                 expression.peek().type = Expression.Type.COMMA_SEPARATED;
@@ -122,7 +126,7 @@ WhiteSpace = [ ]
           yybegin(EXPRESSION_QUOTE);
           return CogScriptTypes.EXPR_STR;
     }
-    [^] {return For(expression, CogScriptTypes.EXPR);}
+    [^] {return For(expression, CogScriptTypes.BAD_CHARACTER);}
 }
 <EXPRESSION_QUOTE> {
     "\"" {
@@ -131,7 +135,7 @@ WhiteSpace = [ ]
     }
     {LineTerminator} {
           yybegin(YYINITIAL);
-          return CogScriptTypes.WHITESPACE;
+          return CogScriptTypes.LINE_TERMINATOR;
     }
     [^\"\n\r]+ {
           return CogScriptTypes.EXPR_STR;
@@ -140,7 +144,7 @@ WhiteSpace = [ ]
 <EXPRESSION_VAR> {
     {LineTerminator} {
               yybegin(YYINITIAL);
-              return CogScriptTypes.WHITESPACE;
+              return CogScriptTypes.LINE_TERMINATOR;
     }
     [a-zA-Z0-9_$]+ {
         yybegin(EXPRESSION_VAR2);
@@ -150,7 +154,7 @@ WhiteSpace = [ ]
 <EXPRESSION_VAR2> {
     {LineTerminator} {
         yybegin(YYINITIAL);
-        return CogScriptTypes.WHITESPACE;
+        return CogScriptTypes.LINE_TERMINATOR;
     }
     {WhiteSpace}*"="{WhiteSpace}* {
         yybegin(EXPRESSION); // Variable defenition ended. Return to expression handler
@@ -158,10 +162,11 @@ WhiteSpace = [ ]
     }
 }
 <FAIL_LINE_EXPR> {
-    {LineTerminator} {yybegin(YYINITIAL); return CogScriptTypes.BAD_CHARACTER;}
+    {LineTerminator} {yybegin(YYINITIAL); return CogScriptTypes.LINE_TERMINATOR;}
     [^] {return CogScriptTypes.BAD_CHARACTER;}
 }
 
 "}" {return CogScriptTypes.BRACKETS; }
+{LineTerminator} {yybegin(YYINITIAL); return CogScriptTypes.LINE_TERMINATOR;}
 {WhiteSpace} {yybegin(YYINITIAL); return CogScriptTypes.WHITESPACE;}
 [^] {return CogScriptTypes.BAD_CHARACTER; }

@@ -35,7 +35,7 @@ public class CogScriptParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getStringLiteralElements() {
-        return TokenSet.EMPTY;
+        return CogScriptTokenSets.STRING_LITERALS;
     }
 
     @NotNull

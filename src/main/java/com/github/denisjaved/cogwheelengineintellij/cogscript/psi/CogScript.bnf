@@ -16,11 +16,18 @@
 
 simpleFile ::= item_*
 
-private item_ ::= (property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
-    |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET)
+private item_ ::= (variableName|keywords|namedVariable|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
+    |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET|LINE_TERMINATOR|IMPOSSIBLE|BAD_CHARACTER
+    |IF_KEYWORD)
 
-
-property ::= (COMMENT) | BAD_CHARACTER
+keywords ::= KEYWORD | IF_KEYWORD
+namedVariable ::= EXPR_VARNAME | EXPR_ROOT
 {
-  methods=[stGetType]
+    implements="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.NamedVariable"
+    mixin="com.github.denisjaved.cogwheelengineintellij.cogscript.psi.impl.NamedVariableImpl"
+    methods=[setName getNameIdentifier]
+}
+variableName ::= EXPR_VARNAME
+{
+    extends="namedVariable"
 }

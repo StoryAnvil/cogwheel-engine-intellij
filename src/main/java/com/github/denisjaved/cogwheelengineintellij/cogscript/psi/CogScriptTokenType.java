@@ -14,10 +14,9 @@ public class CogScriptTokenType extends IElementType {
 
     @Override
     public String toString() {
-        return "CogScriptTokenFaction." + super.toString();
+        return "CogScriptTokenType." + super.toString();
     }
 
-    @SuppressWarnings("UnstableApiUsage") @ApiStatus.Experimental // This method is unstable too and used only for debugging
     public static IElementType For(Expression expr, IElementType thiz) {
 //        if (expr.peekSafe() != null)
 //            return new CogScriptIntTokenType(thiz.getDebugName(), expr.peek().id);

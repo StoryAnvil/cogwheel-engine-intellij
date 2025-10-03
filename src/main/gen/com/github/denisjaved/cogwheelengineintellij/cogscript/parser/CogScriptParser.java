@@ -21,7 +21,7 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
 
   public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
-    b = adapt_builder_(t, b, this, null);
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
     r = parse_root_(t, b);
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
@@ -35,13 +35,20 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
     return simpleFile(b, l + 1);
   }
 
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(NAMED_VARIABLE, VARIABLE_NAME),
+  };
+
   /* ********************************************************** */
-  // property|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
-  //     |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET
+  // variableName|keywords|namedVariable|COMMENT|KEYWORD|BRACKETS|EXPR|WHITESPACE|HEAD_WHITESPACE
+  //     |EXPR_ROOT|EXPR_PROP|EXPR_STR|EXPR_NUMERIC|EXPR_VARNAME|EXPR_BRACKET|LINE_TERMINATOR|IMPOSSIBLE|BAD_CHARACTER
+  //     |IF_KEYWORD
   static boolean item_(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "item_")) return false;
     boolean r;
-    r = property(b, l + 1);
+    r = variableName(b, l + 1);
+    if (!r) r = keywords(b, l + 1);
+    if (!r) r = namedVariable(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, KEYWORD);
     if (!r) r = consumeToken(b, BRACKETS);
@@ -54,18 +61,35 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, EXPR_NUMERIC);
     if (!r) r = consumeToken(b, EXPR_VARNAME);
     if (!r) r = consumeToken(b, EXPR_BRACKET);
+    if (!r) r = consumeToken(b, LINE_TERMINATOR);
+    if (!r) r = consumeToken(b, IMPOSSIBLE);
+    if (!r) r = consumeToken(b, BAD_CHARACTER);
+    if (!r) r = consumeToken(b, IF_KEYWORD);
     return r;
   }
 
   /* ********************************************************** */
-  // (COMMENT) | BAD_CHARACTER
-  public static boolean property(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property")) return false;
-    if (!nextTokenIs(b, "<property>", BAD_CHARACTER, COMMENT)) return false;
+  // KEYWORD | IF_KEYWORD
+  public static boolean keywords(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "keywords")) return false;
+    if (!nextTokenIs(b, "<keywords>", IF_KEYWORD, KEYWORD)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, PROPERTY, "<property>");
-    r = consumeToken(b, COMMENT);
-    if (!r) r = consumeToken(b, BAD_CHARACTER);
+    Marker m = enter_section_(b, l, _NONE_, KEYWORDS, "<keywords>");
+    r = consumeToken(b, KEYWORD);
+    if (!r) r = consumeToken(b, IF_KEYWORD);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // EXPR_VARNAME | EXPR_ROOT
+  public static boolean namedVariable(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namedVariable")) return false;
+    if (!nextTokenIs(b, "<named variable>", EXPR_ROOT, EXPR_VARNAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, NAMED_VARIABLE, "<named variable>");
+    r = consumeToken(b, EXPR_VARNAME);
+    if (!r) r = consumeToken(b, EXPR_ROOT);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -80,6 +104,18 @@ public class CogScriptParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "simpleFile", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // EXPR_VARNAME
+  public static boolean variableName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variableName")) return false;
+    if (!nextTokenIs(b, EXPR_VARNAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXPR_VARNAME);
+    exit_section_(b, m, VARIABLE_NAME, r);
+    return r;
   }
 
 }

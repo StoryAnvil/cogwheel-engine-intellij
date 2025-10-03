@@ -8,28 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.denisjaved.cogwheelengineintellij.cogscript.psi.CogScriptTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.denisjaved.cogwheelengineintellij.cogscript.psi.*;
 
-public class CogScriptPropertyImpl extends ASTWrapperPsiElement implements CogScriptProperty {
+public class CogScriptNamedVariableImpl extends NamedVariableImpl implements CogScriptNamedVariable {
 
-  public CogScriptPropertyImpl(@NotNull ASTNode node) {
+  public CogScriptNamedVariableImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CogScriptVisitor visitor) {
-    visitor.visitProperty(this);
+    visitor.visitNamedVariable(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CogScriptVisitor) accept((CogScriptVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  public CogScriptTokenFaction stGetType() {
-    return CogScriptPsiImplUtil.stGetType(this);
   }
 
 }
